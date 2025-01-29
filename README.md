@@ -69,6 +69,7 @@ yarn dev
 5. Open [http://localhost:3000](http://localhost:3000) to view the application
 
 ## 📁 Project Structure
+```
 frontend/
 ├── src/
 │ ├── app/ # Next.js 13+ App Router
@@ -78,6 +79,9 @@ frontend/
 │ └── components/ # Reusable components
 ├── public/ # Static assets
 └── tailwind.config.ts # TailwindCSS configuration
+```
+
+
 
 
 ## 🎨 Design System
