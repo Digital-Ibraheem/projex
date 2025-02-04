@@ -4,9 +4,9 @@ import Button from "./ui/button";
 
 export default function Navbar() {
   return (
-    <nav className="absolute top-0 left-0 w-full flex justify-center px-16 bg-transparent z-50">
+    <nav className="absolute top-0 left-0 w-full flex justify-center px-8 sm:px-16 bg-transparent z-50">
       {/* Border extending full width */}
-      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-500/50 to-transparent pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
 
       <div className="flex justify-between items-center w-full max-w-[1296px] py-6 relative">
         {/* Logo */}
@@ -16,7 +16,7 @@ export default function Navbar() {
         </div>
 
         {/* Navigation Links */}
-        <div className="flex items-center gap-6 bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.08)] rounded-full px-4 py-2">
+        <div className="hidden md:flex items-center gap-6 bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.08)] rounded-full px-4 py-2">
           <a href="#" className="text-white text-sm font-normal transition hover:text-gray-400">Create</a>
           <a href="#" className="text-white text-sm font-normal transition hover:text-gray-400">Explore</a>
           <a href="#" className="text-white text-sm font-normal transition hover:text-gray-400">About</a>
