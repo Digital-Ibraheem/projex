@@ -12,6 +12,11 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        inter: ["var(--font-inter)", "sans-serif"],
+        heading: ["var(--font-space)", "sans-serif"],
+        roboto: ["var(--font-roboto)", "sans-serif"],
+      },
     },
   },
   plugins: [],
