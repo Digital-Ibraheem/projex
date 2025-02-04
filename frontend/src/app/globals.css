@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #1b1b1b;
+  --background: #000;
   --foreground: #fff;
 
   /* Add font variables from Next.js setup */
