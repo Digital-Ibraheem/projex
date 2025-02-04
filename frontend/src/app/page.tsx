@@ -34,8 +34,8 @@ export default function HomePage() {
         <div className="relative z-10">
           <h1 className="text-6xl font-semibold">Build Projects. Showcase Your Skills.</h1>
           <p className="text-gray-400 mt-4">Join fellow students to gain experience, build your portfolio, and collaborate on real-world ideas.</p>
-          <div className="flex justify-center items-center mt-6">
-            <Button className="">Start Your Journey</Button>
+          <div className="flex justify-center items-center mt-4">
+            <Button className="">Start your journey</Button>
           </div>
 
 
