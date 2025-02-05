@@ -21,7 +21,7 @@ export default function Navbar() {
     return (
         <>
             <nav className={clsx(
-                "fixed top-0 left-0 w-full flex justify-center px-8 sm:px-16 z-50 transition-all duration-500",
+                "fixed top-0 left-0 w-full flex justify-center px-4 sm:px-8 md:px-16 z-50 transition-all duration-500",
                 hasScrolled ? "bg-[#1a1a1a]/90 backdrop-blur-md" : "bg-transparent"
             )}>
                 {/* Border extending full width */}
@@ -52,7 +52,7 @@ export default function Navbar() {
 
             <div
                 className={clsx(
-                    "md:hidden fixed top-0 right-0 h-full w-full bg-[#1a1a1a] shadow-lg z-40 transition-transform duration-300 pl- pt-24",
+                    "md:hidden fixed top-0 right-0 h-full w-full bg-[#1a1a1a] shadow-lg z-40 transition-transform duration-300 pt-24",
                     isSidebarOpen ? "translate-x-0" : "translate-x-full"
                 )}
             >
@@ -69,7 +69,6 @@ export default function Navbar() {
                 </div>
                 <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
             </div>
-
         </>
     );
 }

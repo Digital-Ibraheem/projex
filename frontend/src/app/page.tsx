@@ -6,7 +6,7 @@ import AboutSection from '@/components/AboutSection';
 
 export default function HomePage() {
   return (
-    <div className={`min-h-screen bg-gray-900 text-white flex flex-col`}>
+    <div className={`min-h-screen bg-gray-900 text-white flex flex-col font-roboto`}>
       {/* Navbar */}
       <Navbar />
 
