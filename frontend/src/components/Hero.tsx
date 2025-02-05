@@ -1,10 +1,10 @@
-import Button from "./ui/button";
+import Button from "./ui/Button";
 
 export default function Hero() {
   return (
     <section
       className="relative h-screen flex flex-col items-center justify-center text-center px-10 text-white bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/handshake.jpg')" }}
+      style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
     >
       {/* Dark Overlay & Fade Effect */}
       <div className="absolute inset-0 bg-black opacity-70"></div>

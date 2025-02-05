@@ -1,8 +1,8 @@
 'use client';
 
-import Button from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import AboutSection from '@/components/AboutSection';
 
 export default function HomePage() {
   return (
@@ -12,7 +12,7 @@ export default function HomePage() {
 
       <main>
         <Hero />
-        <div className='h-[100vh]'></div>
+        <AboutSection />
       </main>
     </div>
   );
