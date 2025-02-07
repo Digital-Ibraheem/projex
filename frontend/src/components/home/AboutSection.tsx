@@ -8,7 +8,7 @@ export default function AboutSection() {
         <section
             className="relative py-16 flex flex-col items-center justify-center px-4 text-[#1a1a1a] sm:px-10 bg-white"
         >
-            <h1 className="sm:px-8 md:px-0 text-4xl md:text-6xl font-semibold text-[#1a1a1a] max-w-6xl w-full">What's XYZ?</h1>
+            <h1 className="sm:px-8 md:px-0 text-4xl md:text-6xl font-semibold text-[#1a1a1a] max-w-6xl w-full mb-4">What's XYZ?</h1>
             <div className="flex flex-col md:flex-row mt-6 w-full max-w-6xl items-center justify-center">
                 <div className="sm:px-8 md:px-0 md:pr-8 flex-1 flex justify-center items-center">
                     {/* Image Below Title */}

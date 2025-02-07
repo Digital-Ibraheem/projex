@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import HamburgerMenu from "./ui/HamburgerMenu";
-import Button from "./ui/Button";
+import HamburgerMenu from "../ui/HamburgerMenu";
+import Button from "../ui/Button";
 import clsx from "clsx";
 
 export default function Navbar() {

@@ -1,9 +1,9 @@
 'use client';
 
-import Navbar from '@/components/Navbar';
-import Hero from '@/components/Hero';
-import AboutSection from '@/components/AboutSection';
-import HowItWorks from '@/components/HowItWorks';
+import Navbar from '@/components/root/Navbar';
+import Hero from '@/components/home/Hero';
+import AboutSection from '@/components/home/AboutSection';
+import Footer from '@/components/root/Footer';
 
 export default function HomePage() {
   return (
@@ -14,8 +14,8 @@ export default function HomePage() {
       <main>
         <Hero />
         <AboutSection />
-        <HowItWorks />
       </main>
+      <Footer />
     </div>
   );
 }
