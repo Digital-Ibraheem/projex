@@ -3,7 +3,7 @@ name: Deploy Next.js to Vercel
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
 
 jobs:
