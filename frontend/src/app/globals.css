@@ -7,14 +7,13 @@
   --foreground: #fff;
 
   /* Add font variables from Next.js setup */
-  --font-sans: "Inter", sans-serif;
-  --font-mono: "Geist Mono", monospace;
-  --font-heading: "Space Grotesk", sans-serif;
+  --font-inter: "Inter", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
 }
 
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-sans);
+  font-family: var(--font-inter);
 }
