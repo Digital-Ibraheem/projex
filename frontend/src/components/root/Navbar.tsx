@@ -38,7 +38,6 @@ export default function Navbar() {
                     <div className="hidden md:flex items-center gap-6 bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.08)] rounded-full px-4 py-2">
                         <a href="#" className="text-white text-sm font-normal transition hover:text-gray-400">Create</a>
                         <a href="#" className="text-white text-sm font-normal transition hover:text-gray-400">Explore</a>
-                        <a href="#" className="text-white text-sm font-normal transition hover:text-gray-400">About</a>
                     </div>
 
                     {/* Actions */}
