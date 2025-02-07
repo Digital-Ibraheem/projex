@@ -12,7 +12,7 @@ export default function Hero() {
             {/* Content (must be above overlay) */}
             <div className="relative z-10">
                 <h1 className="text-4xl sm:text-6xl font-semibold">Build Projects. Showcase Your Skills.</h1>
-                <p className="text-gray-400 mt-4 text-sm sm:text-base font-inter">Join fellow students to gain experience, build your portfolio, and collaborate on real-world ideas.</p>
+                <p className="text-gray-400 mt-4 text-sm sm:text-base font-inter">Find students with real ideas to collaborate with, or bring your own ideas to the table.</p>
                 <div className="flex justify-center items-center mt-4">
                     <Button className="">Start your journey</Button>
                 </div>
