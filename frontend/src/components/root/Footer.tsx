@@ -28,7 +28,7 @@ export default function Footer() {
                     {/* Logo */}
                     <div className="flex items-center gap-3">
                         <div className="w-9 h-9 bg-white rounded-full"></div> {/* Placeholder for logo */}
-                        <span className="text-white text-lg font-medium">Projects</span>
+                        <span className="text-white text-lg font-medium">Project</span>
                     </div>
                     
                     {/* Privacy & Terms */}
