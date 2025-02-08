@@ -10,9 +10,9 @@ export default function Footer() {
             
             {/* Open Beta Announcement */}
             <div className="relative z-10">
-                <h1 className="text-4xl sm:text-6xl font-semibold px-10">We're in Open Beta!</h1>
+                <h1 className="text-4xl sm:text-6xl font-semibold px-10">We&apos;re in Open Beta!</h1>
                 <p className="text-gray-400 mt-6 text-sm sm:text-base font-inter px-10">
-                    Now’s your chance to get in early. Connect with other students, build real projects, and help shape the future of this platform. Let’s make something awesome together.
+                    Now&apos;s your chance to get in early. Connect with other students, build real projects, and help shape the future of this platform. Let&apos;s make something awesome together.
                 </p>
                 <div className="flex justify-center items-center mt-6">
                     <Button className="">Join the Community →</Button>
