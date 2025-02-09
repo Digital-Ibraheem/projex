@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import HamburgerMenu from "@/components/ui/HamburgerMenu";
 import Button from "@/components/ui/Button";
 import clsx from "clsx";
@@ -8,16 +9,20 @@ import clsx from "clsx";
 export default function Navbar() {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [hasScrolled, setHasScrolled] = useState(false);
-    const [isPopUpOpen,setIsPopUpOpen] = useState(false);
+    const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+    const pathname = usePathname(); // Get current route
 
     useEffect(() => {
         const handleScroll = () => {
-            setHasScrolled(window.scrollY > 50);
+            // Set hasScrolled to true if scrolled past 50px OR if not on home page
+            setHasScrolled(window.scrollY > 50 || pathname !== "/");
         };
 
+        // Check scroll on page load and when scrolling
+        handleScroll();
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [pathname]); // Re-run effect when the route changes
 
     return (
         <>
@@ -49,52 +54,6 @@ export default function Navbar() {
                     </div>
                 </div>
             </nav>
-
-            <div
-                className={clsx(
-                    "md:hidden fixed top-0 right-0 h-full w-full bg-[#1a1a1a] shadow-lg z-40 transition-transform duration-300 pt-24",
-                    isSidebarOpen ? "translate-x-0" : "translate-x-full"
-                )}
-            >
-                <div className="py-5 px-10">
-                    <a href="#" className="text-white text-xl font-normal transition hover:text-gray-400">Create</a>
-                </div>
-                <div className="z-50 absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
-                <div className="py-5 px-10">
-                    <a href="#" className="text-white text-xl font-normal transition hover:text-gray-400">Explore</a>
-                </div>
-                <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
-                <div className="py-5 px-10">
-                    <a href="#" className="text-white text-xl font-normal transition hover:text-gray-400">About</a>
-                </div>
-                <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
-            </div>
-
-            {isPopUpOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-[50%] h-[55%] text-black relative">
-                        {/* Close Button (Top-right) */}
-                        <button
-                            className="absolute top-4 right-4 px-2 py-1 text-sm bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
-                            onClick={() => setIsPopUpOpen(false)}>
-                            ✕
-                        </button>
-
-                        {/* Left side (Text) */}
-                        <div className="w-1/2 pr-4">
-                            <h2 className="text-xl font-bold">Sign Up</h2>
-                            <p className="mt-4">PLEASE SIGN UP CHAT.</p>
-                            <p className="mt-4">PLEASE SIGN UP CHAT.</p>
-                        </div>
-                        
-                        {/* Right side (Button) */}
-                        <div className="w-1/2 pl-4 flex items-center">
-                            <p className="text-left w-full">W</p>
-                        </div>
-                    </div>
-                </div>
-             )}
-
         </>
     );
 }
