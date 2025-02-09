@@ -12,7 +12,9 @@ export default function HamburgerMenu({ onClick }: HamburgerMenuProps) {
 
   const handleClick = () => {
     setIsOpen(!isOpen);
-    onClick && onClick();
+    if (onClick) {
+        onClick();
+    }
   };
 
   return (
