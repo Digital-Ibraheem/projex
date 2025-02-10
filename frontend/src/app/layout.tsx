@@ -16,8 +16,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${roboto.variable}`}>
       <body className="antialiased">
-        <Navbar />
-        {children}
+      <Navbar />
+        <main tabIndex={0} className="pt-[90px]"> {/* Adjust this value based on your navbar height */}
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

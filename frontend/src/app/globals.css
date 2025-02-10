@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #000;
-  --foreground: #fff;
+  --background: whitesmoke;
+  --foreground: #1b1b1b;
 
   /* Add font variables from Next.js setup */
   --font-inter: "Inter", sans-serif;

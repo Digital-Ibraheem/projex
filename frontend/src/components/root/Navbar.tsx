@@ -18,14 +18,17 @@ export default function Navbar() {
         const handleScroll = () => {
             setHasScrolled(window.scrollY > 50);
         };
-
+    
+        handleScroll();
+    
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+    
 
     return (
         <>
-            <nav className={clsx(
+            <nav tabIndex={0} className={clsx(
                 "fixed top-0 left-0 w-full flex justify-center px-4 sm:px-8 md:px-16 z-50 transition-all duration-500",
                 hasScrolled || !isHomePage ? "bg-[#1a1a1a]/90 backdrop-blur-md" : "bg-transparent"
             )}>

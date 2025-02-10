@@ -3,7 +3,7 @@ import Button from "@/components/ui/Button";
 export default function Footer() {
     return (
         <footer
-            className="relative flex flex-col items-center justify-center text-center text-white bg-black pt-20 pb-10 bg-cover bg-scroll md:bg-fixed bg-[url('/images/campus.webp')]"
+            tabIndex={0} className="relative flex flex-col items-center justify-center text-center text-white bg-black pt-20 pb-10 bg-cover bg-scroll md:bg-fixed bg-[url('/images/campus.webp')]"
         >
             {/* Dark Overlay */}
             <div className="absolute inset-0 bg-black opacity-80"></div>
