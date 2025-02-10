@@ -130,7 +130,7 @@ const ProfileCreatePage = () => {
                         <PfpSkeleton />
                     ) : (
                         <img
-                            src={selectedImage || randomAvatar || "/images/default-pfp.jpg"}
+                            src={selectedImage || randomAvatar || undefined}
                             alt="Profile Picture"
                             className="rounded-full object-cover w-[200px] h-[200px]"
                             onLoad={() => setIsLoading(false)}
@@ -139,7 +139,7 @@ const ProfileCreatePage = () => {
 
                     {/* Plus Sign */}
                     {!selectedImage && (
-                        <div className="absolute bottom-2 right-2 bg-blue-500 text-white w-10 h-10 rounded-full text-2xl flex items-center justify-center border-2 border-white shadow-lg">
+                        <div className="absolute bottom-2 right-2 bg-gray-700 text-white w-10 h-10 rounded-full text-3xl flex items-center justify-center border-[3px] border-white shadow-lg">
                             +
                         </div>
                     )}
@@ -278,7 +278,7 @@ const ProfileCreatePage = () => {
                     </div>
 
                     {/* Submit Button */}
-                    <button type="submit" className="w-full bg-blue-600 text-white font-medium py-2 rounded-md mt-4 hover:bg-blue-700 transition">
+                    <button type="submit" className="w-full bg-[#1b1b1b] text-white font-medium py-2 rounded-md mt-4 hover:text-gray-300 transition">
                         Complete Profile
                     </button>
                 </form>
