@@ -18,13 +18,13 @@ export default function Navbar() {
         const handleScroll = () => {
             setHasScrolled(window.scrollY > 50);
         };
-    
+
         handleScroll();
-    
+
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
-    
+
 
     return (
         <>
@@ -64,16 +64,21 @@ export default function Navbar() {
                     isSidebarOpen ? "translate-x-0" : "translate-x-full"
                 )}
             >
+
                 <div className="py-5 px-10">
                     <Link href="/create" onClick={() => setSidebarOpen(false)} className="text-white text-xl font-normal transition hover:text-gray-400">
                         Create
                     </Link>
                 </div>
+                <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
+
                 <div className="py-5 px-10">
                     <Link href="/explore" onClick={() => setSidebarOpen(false)} className="text-white text-xl font-normal transition hover:text-gray-400">
                         Explore
                     </Link>
                 </div>
+                <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
+
             </div>
 
             {/* Sign Up Popup */}

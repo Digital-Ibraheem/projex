@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import countryList from 'react-select-country-list';
@@ -36,6 +37,8 @@ const ProfileCreatePage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [name, setName] = useState("");
     const [bio, setBio] = useState("");
+    const router = useRouter();
+
 
     const excludedCountries = ['IL'];
     const countryOptions = countryList()
@@ -101,6 +104,23 @@ const ProfileCreatePage = () => {
         if (skills.length === 0) errors.push("skills");
 
         setFormErrors(errors);
+
+        if (errors.length === 0) {
+            console.log("Form submitted successfully!");
+
+            const profileData = {
+                name,
+                bio,
+                skills,
+                github,
+                linkedin,
+                country: selectedCountry?.label || "",
+                profilePicture: selectedImage || randomAvatar,
+            };
+
+            console.log(profileData);
+        router.push('/explore');
+        }
     };
     return (
         <div className="bg-gray-100 flex flex-col px-5 py-8 sm:py-16 sm:px-20 w-full">
@@ -225,12 +245,12 @@ const ProfileCreatePage = () => {
                         />
                         <div className="flex flex-wrap gap-2 mt-2">
                             {skills.map((skill, index) => (
-                                <div key={index} className="relative bg-blue-100 text-blue-700 px-3 py-1 rounded-full flex items-center">
+                                <div key={index} className="relative shadow-md bg-gray-200 text-gray-700 px-3 py-1 rounded-full flex items-center">
                                     {skill}
                                     <button
                                         type="button"
                                         onClick={() => removeSkill(index)}
-                                        className="ml-2 text-blue-600 hover:text-blue-800 text-sm font-bold"
+                                        className="ml-2 text-gray-600 hover:text-gray-800 text-sm font-bold"
                                     >
                                         ✕
                                     </button>
