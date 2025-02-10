@@ -1,14 +1,13 @@
-'use client'
+'use client';
 
 import Image from 'next/image';
 import React, { useState } from 'react';
 import Select from 'react-select';
 import countryList from 'react-select-country-list';
 
-// Define the CountryOption type
 interface CountryOption {
-    value: string; // ISO code of the country
-    label: string; // Name of the country
+    value: string;
+    label: string;
 }
 
 const ProfileCreatePage = () => {
@@ -16,30 +15,27 @@ const ProfileCreatePage = () => {
     const [skillInput, setSkillInput] = useState("");
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
+    const [github, setGithub] = useState("");
+    const [linkedin, setLinkedin] = useState("");
+    const [githubError, setGithubError] = useState("");
+    const [linkedinError, setLinkedinError] = useState("");
+    const [formErrors, setFormErrors] = useState<string[]>([]);
+
+    const [name, setName] = useState("");
+    const [bio, setBio] = useState("");
 
     const excludedCountries = ['IL'];
-
     const countryOptions = countryList()
-    .getData()
-    .filter((country: CountryOption) => !excludedCountries.includes(country.value))
-    .map((country: CountryOption) => {
-        if (country.value === "PS") {
-            return {
-                ...country,
-                label: "Palestine",
-            };
-        }
-        return country;
-    });
-
+        .getData()
+        .filter((country: CountryOption) => !excludedCountries.includes(country.value))
+        .map((country: CountryOption) => country.value === "PS" ? { ...country, label: "Palestine" } : country);
 
     const handleSkillAdd = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter" && skillInput.trim() !== "") {
             event.preventDefault();
-
             if (skills.length < 10) {
                 setSkills([...skills, skillInput.trim()]);
-                setSkillInput(""); // Clear input after adding
+                setSkillInput("");
             }
         }
     };
@@ -48,34 +44,69 @@ const ProfileCreatePage = () => {
         setSkills(skills.filter((_, i) => i !== index));
     };
 
-    // Handle file selection for profile picture
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
-            const imageUrl = URL.createObjectURL(event.target.files[0]);
-            setSelectedImage(imageUrl);
+            setSelectedImage(URL.createObjectURL(event.target.files[0]));
         }
     };
 
+    const validateGithub = (url: string) => {
+        const githubRegex = /^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9_-]+\/?$/;
+        if (url && !githubRegex.test(url)) {
+            setGithubError("Invalid GitHub URL (e.g., https://github.com/username)");
+        } else {
+            setGithubError("");
+        }
+        setGithub(url);
+    };
+
+    const validateLinkedin = (url: string) => {
+        const linkedinRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/(in|company)\/[a-zA-Z0-9_-]+\/?$/;
+        if (url && !linkedinRegex.test(url)) {
+            setLinkedinError("Invalid LinkedIn URL (e.g., https://linkedin.com/in/username)");
+        } else {
+            setLinkedinError("");
+        }
+        setLinkedin(url);
+    };
+
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        const errors = [];
+
+        if (!name.trim()) errors.push("name");
+        if (!bio.trim()) errors.push("bio");
+        if (skills.length === 0) errors.push("skills");
+
+        setFormErrors(errors);
+    };
     return (
-        <div className="bg-gray-100 flex flex-col py-16 sm:py-20 px-20 w-full">
-            <h1 className="text-3xl font-bold text-[#1a1a1a] text-center">
-                Finish Setting up Your Profile
+        <div className="bg-gray-100 flex flex-col px-5 py-8 sm:py-16 sm:px-20 w-full">
+            <h1 className="font-bold text-center text-2xl sm:text-4xl">
+                Finish Setting Up Your Profile
             </h1>
 
-            <div className='w-full flex flex-col items-center'>
+            {/* Error Message */}
+            {formErrors.length > 0 && (
+                <p className="bg-red-100 text-red-600 p-3 text-center rounded-md mt-4">
+                    Please fill in all required fields.
+                </p>
+            )}
+
+            <div className='w-full flex flex-col items-center font-roboto mt-10'>
 
                 {/* Hidden File Input */}
-                <input 
-                    type="file" 
-                    accept="image/*" 
+                <input
+                    type="file"
+                    accept="image/*"
                     id="fileUpload"
                     className="hidden"
-                    onChange={handleImageUpload} 
+                    onChange={handleImageUpload}
                 />
 
                 {/* Profile Picture Container */}
-                <div 
-                    className="relative w-[200px] h-[200px] mt-6 cursor-pointer" 
+                <div
+                    className="relative w-[200px] h-[200px] mt-6 cursor-pointer"
                     onClick={() => document.getElementById('fileUpload')?.click()}
                 >
                     <Image
@@ -85,21 +116,19 @@ const ProfileCreatePage = () => {
                         height={200}
                         className="rounded-full object-cover w-[200px] h-[200px]"
                     />
-                    {/* Plus Sign */}
                     {!selectedImage && <div className="absolute bottom-2 right-2 bg-blue-500 text-white w-10 h-10 rounded-full text-2xl flex items-center justify-center border-2 border-white shadow-lg">
                         +
                     </div>}
                 </div>
 
-                {/* Clickable Add Profile Picture Text */}
-                <p 
-                    className='text-gray-400 mt-3 underline cursor-pointer' 
+                <p
+                    className='text-gray-400 mt-3 underline cursor-pointer'
                     onClick={() => document.getElementById('fileUpload')?.click()}
                 >
                     {selectedImage ? "Change your profile picture" : "Add a profile picture"}
                 </p>
 
-                <form className="mt-6 w-full max-w-lg">
+                <form className="mt-6 w-full max-w-lg" onSubmit={handleSubmit}>
                     {/* Name Section */}
                     <div className="mb-4">
                         <div className="flex justify-between items-center">
@@ -111,9 +140,11 @@ const ProfileCreatePage = () => {
                         <input
                             type="text"
                             id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             placeholder="Enter your preferred name..."
-                            required
-                            className="w-full border border-gray-300 rounded-md p-2 mt-1 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400"
+                            className={`w-full border rounded-md p-2 mt-1 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400 
+                                ${formErrors.includes("name") ? "border-red-500" : "border-gray-300"}`}
                         />
                     </div>
 
@@ -125,14 +156,13 @@ const ProfileCreatePage = () => {
                             </label>
                             <span className="text-red-500 text-lg">*</span>
                         </div>
-                        <p className="text-gray-500 text-sm my-2">
-                            What you study, where you go to school, anything to teach us about yourself!
-                        </p>
                         <textarea
                             id="bio"
+                            value={bio}
+                            onChange={(e) => setBio(e.target.value)}
                             placeholder="Tell us about yourself..."
-                            required
-                            className="w-full h-24 md:h-32 border border-gray-300 rounded-md p-2 mt-1 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400"
+                            className={`w-full h-24 md:h-32 border rounded-md p-2 mt-1 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400 
+                                ${formErrors.includes("bio") ? "border-red-500" : "border-gray-300"}`}
                         />
                     </div>
 
@@ -142,11 +172,8 @@ const ProfileCreatePage = () => {
                             <label htmlFor="location" className="text-gray-700 font-medium">
                                 Location
                             </label>
-                            <span className="text-md text-gray-400">Optional</span>
+                            <span className="text-gray-400 text-md">Optional</span>
                         </div>
-                        <p className="text-gray-500 text-sm my-2">
-                            Select your country from the list.
-                        </p>
                         <Select
                             options={countryOptions}
                             value={selectedCountry}
@@ -164,11 +191,6 @@ const ProfileCreatePage = () => {
                             </label>
                             <span className="text-red-500 text-lg">*</span>
                         </div>
-                        <p className="text-gray-500 text-sm my-2">
-                            Add the technical skills you have (and don't sell yourself short)!
-                        </p>
-
-                        {/* Input for adding skills */}
                         <input
                             type="text"
                             id="skills"
@@ -176,11 +198,10 @@ const ProfileCreatePage = () => {
                             value={skillInput}
                             onChange={(e) => setSkillInput(e.target.value)}
                             onKeyDown={handleSkillAdd}
-                            className="w-full border border-gray-300 rounded-md p-2 mt-1 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400"
-                            disabled={skills.length >= 10} // Disable if max reached
+                            className={`w-full border rounded-md p-2 mt-1 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400 
+                                ${formErrors.includes("skills") ? "border-red-500" : "border-gray-300"}`}
+                            disabled={skills.length >= 10}
                         />
-
-                        {/* Displaying skills as pill-shaped badges */}
                         <div className="flex flex-wrap gap-2 mt-2">
                             {skills.map((skill, index) => (
                                 <div key={index} className="relative bg-blue-100 text-blue-700 px-3 py-1 rounded-full flex items-center">
@@ -196,6 +217,49 @@ const ProfileCreatePage = () => {
                             ))}
                         </div>
                     </div>
+
+                    {/* GitHub Section */}
+                    <div className="mb-4">
+                    <div className="flex justify-between items-center">
+                            <label htmlFor="github" className="text-gray-700 font-medium">
+                                GitHub Profile
+                            </label>
+                            <span className="text-gray-400 text-md">Optional</span>
+                        </div>
+                        <input
+                            type="url"
+                            id="github"
+                            placeholder="https://github.com/yourusername"
+                            value={github}
+                            onChange={(e) => validateGithub(e.target.value)}
+                            className="w-full border border-gray-300 rounded-md p-2 mt-1 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400"
+                        />
+                        {githubError && <p className="text-red-500 text-sm mt-1">{githubError}</p>}
+                    </div>
+
+                    {/* LinkedIn Section */}
+                    <div className="mb-4">
+                    <div className="flex justify-between items-center">
+                            <label htmlFor="linkedin" className="text-gray-700 font-medium">
+                                LinkedIn Profile
+                            </label>
+                            <span className="text-gray-400 text-md">Optional</span>
+                        </div>
+                        <input
+                            type="url"
+                            id="linkedin"
+                            placeholder="https://linkedin.com/in/yourprofile"
+                            value={linkedin}
+                            onChange={(e) => validateLinkedin(e.target.value)}
+                            className="w-full border border-gray-300 rounded-md p-2 mt-1 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400"
+                        />
+                        {linkedinError && <p className="text-red-500 text-sm mt-1">{linkedinError}</p>}
+                    </div>
+
+                    {/* Submit Button */}
+                    <button type="submit" className="w-full bg-blue-600 text-white font-medium py-2 rounded-md mt-4 hover:bg-blue-700 transition">
+                        Complete Profile
+                    </button>
                 </form>
             </div>
         </div>
