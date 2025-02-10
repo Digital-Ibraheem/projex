@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import countryList from 'react-select-country-list';
 
@@ -10,17 +10,30 @@ interface CountryOption {
     label: string;
 }
 
+const PfpSkeleton = () => {
+    return (
+        <div className="relative w-[200px] h-[200px] rounded-full bg-gray-200 animate-pulse"></div>
+    );
+};
+
+const avatarNames = [
+    "Jessica", "Jude", "Kimberly", "Sara", "Liliana", "Mackenzie", "Vivian",
+    "Christian", "Jade", "Aidan", "Eden", "Liam", "Avery", "Wyatt", "Sadie",
+    "Brian", "George", "Adrian", "Andrea", "Ryker"
+];
+
 const ProfileCreatePage = () => {
     const [skills, setSkills] = useState<string[]>([]);
     const [skillInput, setSkillInput] = useState("");
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [randomAvatar, setRandomAvatar] = useState<string | null>(null);
     const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
     const [github, setGithub] = useState("");
     const [linkedin, setLinkedin] = useState("");
     const [githubError, setGithubError] = useState("");
     const [linkedinError, setLinkedinError] = useState("");
     const [formErrors, setFormErrors] = useState<string[]>([]);
-
+    const [isLoading, setIsLoading] = useState(true);
     const [name, setName] = useState("");
     const [bio, setBio] = useState("");
 
@@ -28,7 +41,24 @@ const ProfileCreatePage = () => {
     const countryOptions = countryList()
         .getData()
         .filter((country: CountryOption) => !excludedCountries.includes(country.value))
-        .map((country: CountryOption) => country.value === "PS" ? { ...country, label: "Palestine" } : country);
+        .map((country: CountryOption) => (country.value === "PS" ? { ...country, label: "Palestine" } : country));
+
+    useEffect(() => {
+        const randomName = avatarNames[Math.floor(Math.random() * avatarNames.length)];
+        const avatarUrl = `https://api.dicebear.com/9.x/shapes/svg?seed=${randomName}`;
+
+        // Fetch the image to confirm it's available before setting the state
+        fetch(avatarUrl)
+            .then((res) => {
+                if (res.ok) {
+                    setRandomAvatar(avatarUrl);
+                } else {
+                    setRandomAvatar("/images/default-pfp.jpg");
+                }
+            })
+            .catch(() => setRandomAvatar("/images/default-pfp.jpg"))
+            .finally(() => setIsLoading(false));
+    }, []);
 
     const handleSkillAdd = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter" && skillInput.trim() !== "") {
@@ -52,21 +82,13 @@ const ProfileCreatePage = () => {
 
     const validateGithub = (url: string) => {
         const githubRegex = /^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9_-]+\/?$/;
-        if (url && !githubRegex.test(url)) {
-            setGithubError("Invalid GitHub URL (e.g., https://github.com/username)");
-        } else {
-            setGithubError("");
-        }
+        setGithubError(url && !githubRegex.test(url) ? "Invalid GitHub URL (e.g., https://github.com/username)" : "");
         setGithub(url);
     };
 
     const validateLinkedin = (url: string) => {
         const linkedinRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/(in|company)\/[a-zA-Z0-9_-]+\/?$/;
-        if (url && !linkedinRegex.test(url)) {
-            setLinkedinError("Invalid LinkedIn URL (e.g., https://linkedin.com/in/username)");
-        } else {
-            setLinkedinError("");
-        }
+        setLinkedinError(url && !linkedinRegex.test(url) ? "Invalid LinkedIn URL (e.g., https://linkedin.com/in/username)" : "");
         setLinkedin(url);
     };
 
@@ -96,35 +118,34 @@ const ProfileCreatePage = () => {
             <div className='w-full flex flex-col items-center font-roboto mt-10'>
 
                 {/* Hidden File Input */}
-                <input
-                    type="file"
-                    accept="image/*"
-                    id="fileUpload"
-                    className="hidden"
-                    onChange={handleImageUpload}
-                />
+                <input type="file" accept="image/*" id="fileUpload" className="hidden" onChange={handleImageUpload} />
 
                 {/* Profile Picture Container */}
                 <div
                     className="relative w-[200px] h-[200px] mt-6 cursor-pointer"
                     onClick={() => document.getElementById('fileUpload')?.click()}
                 >
-                    <Image
-                        src={selectedImage || "/images/default-pfp.jpg"}
-                        alt="Profile Picture"
-                        width={200}
-                        height={200}
-                        className="rounded-full object-cover w-[200px] h-[200px]"
-                    />
-                    {!selectedImage && <div className="absolute bottom-2 right-2 bg-blue-500 text-white w-10 h-10 rounded-full text-2xl flex items-center justify-center border-2 border-white shadow-lg">
-                        +
-                    </div>}
+                    {/* Show Skeleton While Loading */}
+                    {isLoading ? (
+                        <PfpSkeleton />
+                    ) : (
+                        <img
+                            src={selectedImage || randomAvatar || "/images/default-pfp.jpg"}
+                            alt="Profile Picture"
+                            className="rounded-full object-cover w-[200px] h-[200px]"
+                            onLoad={() => setIsLoading(false)}
+                        />
+                    )}
+
+                    {/* Plus Sign */}
+                    {!selectedImage && (
+                        <div className="absolute bottom-2 right-2 bg-blue-500 text-white w-10 h-10 rounded-full text-2xl flex items-center justify-center border-2 border-white shadow-lg">
+                            +
+                        </div>
+                    )}
                 </div>
 
-                <p
-                    className='text-gray-400 mt-3 underline cursor-pointer'
-                    onClick={() => document.getElementById('fileUpload')?.click()}
-                >
+                <p className='text-gray-400 mt-3 underline cursor-pointer' onClick={() => document.getElementById('fileUpload')?.click()}>
                     {selectedImage ? "Change your profile picture" : "Add a profile picture"}
                 </p>
 
@@ -220,7 +241,7 @@ const ProfileCreatePage = () => {
 
                     {/* GitHub Section */}
                     <div className="mb-4">
-                    <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-center">
                             <label htmlFor="github" className="text-gray-700 font-medium">
                                 GitHub Profile
                             </label>
@@ -239,7 +260,7 @@ const ProfileCreatePage = () => {
 
                     {/* LinkedIn Section */}
                     <div className="mb-4">
-                    <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-center">
                             <label htmlFor="linkedin" className="text-gray-700 font-medium">
                                 LinkedIn Profile
                             </label>
