@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Button from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
@@ -228,7 +228,7 @@ const ProfileCreatePage = () => {
                     <div className="mb-4">
                         <div className="flex justify-between items-center">
                             <label htmlFor="skills" className="text-gray-700 font-medium">
-                                Skills
+                                Skills (Max 10)
                             </label>
                             <span className="text-red-500 text-lg">*</span>
                         </div>
@@ -298,9 +298,9 @@ const ProfileCreatePage = () => {
                     </div>
 
                     {/* Submit Button */}
-                    <button type="submit" className="w-full bg-[#1b1b1b] text-white font-medium py-2 rounded-md mt-4 hover:text-gray-300 transition">
+                    <Button submit light className="w-full">
                         Complete Profile
-                    </button>
+                    </Button>
                 </form>
             </div>
         </div>
