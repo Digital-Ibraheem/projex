@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
         pathname: "/9.x/shapes/svg",
       },
     ],
+    domains: ["randomuser.me"],
     dangerouslyAllowSVG: true, // Allow SVG images
   },
 };
