@@ -1,4 +1,5 @@
 import Button from "@/components/ui/Button";
+import Link from "next/link";
 
 export default function Hero() {
     return (
@@ -14,7 +15,9 @@ export default function Hero() {
                 <h1 className="text-4xl sm:text-6xl font-semibold">Build Projects. Showcase Your Skills.</h1>
                 <p className="text-gray-400 mt-4 text-sm sm:text-base font-inter">Find students with real ideas to collaborate with, or bring your own ideas to the table.</p>
                 <div className="flex justify-center items-center mt-4">
-                    <Button className="">Start your journey</Button>
+                    <Link href='/explore'>
+                        <Button className="">Start your journey</Button>
+                    </Link>
                 </div>
             </div>
         </section>
