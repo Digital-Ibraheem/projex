@@ -119,7 +119,7 @@ const ProfileCreatePage = () => {
             };
 
             console.log(profileData);
-        router.push('/explore');
+            router.push('/explore');
         }
     };
     return (
@@ -128,12 +128,6 @@ const ProfileCreatePage = () => {
                 Finish Setting Up Your Profile
             </h1>
 
-            {/* Error Message */}
-            {formErrors.length > 0 && (
-                <p className="bg-red-100 text-red-600 p-3 text-center rounded-md mt-4">
-                    Please fill in all required fields.
-                </p>
-            )}
 
             <div className='w-full flex flex-col items-center font-roboto mt-10'>
 
@@ -170,6 +164,12 @@ const ProfileCreatePage = () => {
                 </p>
 
                 <form className="mt-6 w-full max-w-lg" onSubmit={handleSubmit}>
+                    {/* Error Message */}
+                    {formErrors.length > 0 && (
+                        <p className="bg-red-100 text-red-600 p-3 text-center rounded-md my-4">
+                            Please fill in all required fields.
+                        </p>
+                    )}
                     {/* Name Section */}
                     <div className="mb-4">
                         <div className="flex justify-between items-center">
@@ -228,7 +228,7 @@ const ProfileCreatePage = () => {
                     <div className="mb-4">
                         <div className="flex justify-between items-center">
                             <label htmlFor="skills" className="text-gray-700 font-medium">
-                                Skills (Max 10)
+                                Technical Skills (Max 10)
                             </label>
                             <span className="text-red-500 text-lg">*</span>
                         </div>
