@@ -6,7 +6,7 @@ import HamburgerMenu from "@/components/ui/HamburgerMenu";
 import Button from "@/components/ui/Button";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
-
+import SignupForm from "./PopUp";
 export default function Navbar() {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [hasScrolled, setHasScrolled] = useState(false);
@@ -90,29 +90,8 @@ export default function Navbar() {
 
 
             {/* Sign Up Popup */}
-            {isPopUpOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-[50%] h-[55%] text-black relative">
-                        {/* Close Button (Top-right) */}
-                        <button
-                            className="absolute top-4 right-4 px-2 py-1 text-sm bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
-                            onClick={() => setIsPopUpOpen(false)}>
-                            ✕
-                        </button>
-
-                        {/* Left side (Text) */}
-                        <div className="w-1/2 pr-4">
-                            <h2 className="text-xl font-bold">Sign Up</h2>
-                            <p className="mt-4">Join the community and start collaborating on projects.</p>
-                        </div>
-
-                        {/* Right side (Button) */}
-                        <div className="w-1/2 pl-4 flex items-center">
-                            <p className="text-left w-full">W</p>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {isPopUpOpen && <SignupForm setIsPopUpOpen={setIsPopUpOpen}/>
+            }
         </>
     );
 }
