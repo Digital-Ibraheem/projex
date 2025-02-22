@@ -46,7 +46,7 @@ const ExplorePage = () => {
                                     : project.description}
                             </p>
 
-                            {/* View More */}
+                            {/* View More - Only available if the user is logged in. If not take you to the log in popup with a message at the top of the screen saying */}
                             <Link href={`/project/${project.id}`} className="text-blue-600 text-sm font-medium mt-2 block hover:underline">
                                 View details
                             </Link>

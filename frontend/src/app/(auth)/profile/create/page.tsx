@@ -23,9 +23,34 @@ const avatarNames = [
     "Brian", "George", "Adrian", "Andrea", "Ryker"
 ];
 
+const commonSkills = [
+    "JavaScript", "TypeScript", "Python", "Java", "C++", "C#", "Swift", "Go", "Rust", "Ruby",
+    "PHP", "Kotlin", "Scala", "Perl", "Lua", "Dart", "R", "MATLAB", "Haskell", "Elixir",
+    "React", "Next.js", "Vue", "Angular", "Node.js", "Express", "Flask", "Django", "Spring Boot",
+    "Svelte", "Laravel", "Ruby on Rails", "ASP.NET", "FastAPI", "Phoenix", "Gatsby", "Nuxt.js", "Blazor", "Ember.js",
+    "MongoDB", "PostgreSQL", "MySQL", "Firebase", "GraphQL", "REST API", "Docker", "Kubernetes",
+    "SQLite", "Redis", "Cassandra", "DynamoDB", "Elasticsearch", "Oracle DB", "MariaDB", "CouchDB", "Neo4j", "gRPC",
+    "AWS", "Google Cloud", "Azure", "Machine Learning", "Data Science", "TensorFlow", "PyTorch",
+    "Heroku", "DigitalOcean", "Linode", "Terraform", "Ansible", "Jenkins", "Git", "GitHub", "GitLab", "Bitbucket",
+    "DevOps", "CI/CD", "Agile", "UI/UX Design", "Figma", "Cybersecurity",
+    "Scrum", "Kanban", "TDD (Test-Driven Development)", "BDD (Behavior-Driven Development)", "Webpack", "Vite",
+    "HTML", "CSS", "Sass", "Tailwind CSS", "Bootstrap", "Material-UI", "Three.js", "WebGL", "D3.js", "Photoshop", "Sketch",
+    "Linux", "Bash", "PowerShell", "Networking", "TCP/IP", "DNS", "SSL/TLS", "Penetration Testing", "Ethical Hacking",
+    "Blockchain", "Solidity", "Web3.js", "Cryptography", "Natural Language Processing (NLP)", "Computer Vision",
+    "Deep Learning", "Scikit-learn", "Pandas", "NumPy", "Jupyter", "Big Data", "Hadoop", "Spark", "Kafka",
+    "Microservices", "Serverless", "RabbitMQ", "ActiveMQ", "SQL", "NoSQL", "ETL (Extract, Transform, Load)",
+    "Embedded Systems", "IoT (Internet of Things)", "Arduino", "Raspberry Pi", "VHDL", "Verilog", "FPGA",
+    "Game Development", "Unity", "Unreal Engine", "OpenGL", "Vulkan", "Augmented Reality (AR)", "Virtual Reality (VR)",
+    "Tableau", "Power BI", "Data Visualization", "Statistics", "Cloud Security", "Identity Management", "OAuth", "OpenID Connect"
+];
+
+const MAX_SKILLS = 15; // Configurable max skills limit
+
 const ProfileCreatePage = () => {
     const [skills, setSkills] = useState<string[]>([]);
     const [skillInput, setSkillInput] = useState("");
+    const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [randomAvatar, setRandomAvatar] = useState<string | null>(null);
     const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
@@ -34,6 +59,8 @@ const ProfileCreatePage = () => {
     const [githubError, setGithubError] = useState("");
     const [linkedinError, setLinkedinError] = useState("");
     const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [skillError, setSkillError] = useState<string | null>(null); // Added for user feedback
+    const [highlightedIndex, setHighlightedIndex] = useState<number>(-1); // Track highlighted suggestion
     const [isLoading, setIsLoading] = useState(true);
     const [name, setName] = useState("");
     const [bio, setBio] = useState("");
@@ -63,18 +90,76 @@ const ProfileCreatePage = () => {
             .finally(() => setIsLoading(false));
     }, []);
 
+    useEffect(() => {
+        if (skillInput.trim() === "") {
+            setShowSuggestions(false);
+            setSkillError(null);
+            setHighlightedIndex(-1); // Reset highlight when input is empty
+        } else {
+            const matches = commonSkills.filter(skill =>
+                skill.toLowerCase().includes(skillInput.toLowerCase())
+            );
+            setFilteredSuggestions(matches.slice(0, 5)); // Show max 5 suggestions
+            setShowSuggestions(matches.length > 0);
+            setHighlightedIndex(0); // Default to first suggestion
+        }
+    }, [skillInput]);
+
+
+
     const handleSkillAdd = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Enter" && skillInput.trim() !== "") {
+        if (event.key === "Enter") {
             event.preventDefault();
-            if (skills.length < 10) {
-                setSkills([...skills, skillInput.trim()]);
-                setSkillInput("");
+
+            // If there's a highlighted suggestion, select it
+            if (highlightedIndex >= 0 && filteredSuggestions.length > 0) {
+                addSkill(filteredSuggestions[highlightedIndex]);
             }
+            // Otherwise, add the user's input
+            else if (skillInput.trim() !== "") {
+                addSkill(skillInput.trim());
+            }
+        }
+
+        // Handle Arrow Key Navigation
+        else if (event.key === "ArrowDown") {
+            event.preventDefault();
+            setHighlightedIndex((prevIndex) =>
+                prevIndex < filteredSuggestions.length - 1 ? prevIndex + 1 : prevIndex
+            );
+        }
+        else if (event.key === "ArrowUp") {
+            event.preventDefault();
+            setHighlightedIndex((prevIndex) =>
+                prevIndex > 0 ? prevIndex - 1 : 0
+            );
+        }
+    };
+
+
+
+    const addSkill = (skill: string) => {
+        if (skills.length >= MAX_SKILLS) {
+            setSkillError(`You’ve reached the maximum of ${MAX_SKILLS} skills.`); // Set warning
+            setSkillInput(""); // Clear input but keep warning
+            setShowSuggestions(false);
+            return;
+        }
+        if (!skills.includes(skill)) {
+            setSkills([...skills, skill]);
+            setSkillError(null); // Clear warning only on successful add
+            setSkillInput("");
+            setShowSuggestions(false);
+        } else {
+            setSkillError("This skill is already added."); // Set warning for duplicates
+            setSkillInput("");
+            setShowSuggestions(false);
         }
     };
 
     const removeSkill = (index: number) => {
         setSkills(skills.filter((_, i) => i !== index));
+        setSkillError(null); // Clear warning when removing a skill
     };
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -225,24 +310,40 @@ const ProfileCreatePage = () => {
                     </div>
 
                     {/* Skills Section */}
-                    <div className="mb-4">
-                        <div className="flex justify-between items-center">
-                            <label htmlFor="skills" className="text-gray-700 font-medium">
-                                Technical Skills (Max 10)
-                            </label>
-                            <span className="text-red-500 text-lg">*</span>
-                        </div>
+                    <div className="mb-4 relative">
+                        <label htmlFor="skills" className="text-gray-700 font-medium">
+                            Technical Skills (Max {MAX_SKILLS})
+                        </label>
                         <input
                             type="text"
                             id="skills"
-                            placeholder="Type a skill and press enter..."
+                            placeholder="Type a skill and press Enter..."
                             value={skillInput}
                             onChange={(e) => setSkillInput(e.target.value)}
                             onKeyDown={handleSkillAdd}
-                            className={`w-full border rounded-md p-2 mt-1 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400 
-                                ${formErrors.includes("skills") ? "border-red-500" : "border-gray-300"}`}
-                            disabled={skills.length >= 10}
+                            className="w-full border rounded-md p-2 mt-1 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400"
+                            disabled={skills.length >= MAX_SKILLS}
                         />
+
+                        {/* Warning Message */}
+                        {skillError && (
+                            <p className="text-yellow-600 bg-yellow-100 p-1 rounded-md text-sm mt-1">{skillError}</p>
+                        )}
+
+                        {showSuggestions && (
+                            <ul className="absolute bg-white border border-gray-300 rounded-md mt-1 w-full shadow-md z-10">
+                                {filteredSuggestions.map((suggestion, index) => (
+                                    <li
+                                        key={index}
+                                        onClick={() => addSkill(suggestion)}
+                                        className={`px-3 py-2 cursor-pointer transition ${index === highlightedIndex ? "bg-gray-200" : "hover:bg-gray-100"}`}
+                                    >
+                                        {suggestion}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+
                         <div className="flex flex-wrap gap-2 mt-2">
                             {skills.map((skill, index) => (
                                 <div key={index} className="relative shadow-md bg-gray-200 text-gray-700 px-3 py-1 rounded-full flex items-center">
