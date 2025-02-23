@@ -7,9 +7,10 @@ interface ButtonProps {
   onClick?: () => void;
   light?: boolean; // New optional prop
   submit?: boolean;
+  inverted?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ children, className, onClick, light, submit }) => {
+const Button: React.FC<ButtonProps> = ({ children, className, onClick, light, submit, inverted }) => {
   return (
     <button
       onClick={onClick}
@@ -26,6 +27,11 @@ const Button: React.FC<ButtonProps> = ({ children, className, onClick, light, su
         light && [
           "border-gray-400 text-gray-800",
           "hover:bg-[#1a1a1a] hover:text-white"
+        ],
+        // Inverted Styles (opposite of light)
+        inverted && [
+          "text-white bg-gray-900",
+          "hover:bg-transparent hover:text-gray-900 hover:border-gray-900"
         ],
         className
       )}
