@@ -13,6 +13,7 @@ const ExplorePage = () => {
     const [loading, setLoading] = useState(true);
     const [projects, setProjects] = useState<typeof projectData>([]);
     const { user } = useAuth();
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         setTimeout(() => {
@@ -21,8 +22,26 @@ const ExplorePage = () => {
         }, 2000);
     }, []);
 
+    // Remove error when user logs in
+    useEffect(() => {
+        if (user) {
+            setError(null);
+        }
+    }, [user]);
+
+    const handleViewDetailsClick = () => {
+        setError("You need to log in to view project details.");
+    };
+
     return (
         <section className="min-h-screen flex flex-col py-10 px-5 items-center">
+            {/* Error Message */}
+            {error && (
+                <div className="mb-4 w-full max-w-6xl bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md text-sm">
+                    {error}
+                </div>
+            )}
+
             <h1 className="text-3xl md:text-4xl font-semibold text-[#1a1a1a] max-w-6xl w-full mb-4">
                 Explore Featured Ideas
             </h1>
@@ -105,7 +124,7 @@ const ExplorePage = () => {
                                     </Link>
                                 ) : (
                                     <button
-                                        onClick={() => alert("Please log in to view details.")}
+                                        onClick={handleViewDetailsClick}
                                         className="text-blue-600 text-sm font-medium mt-4 hover:underline"
                                     >
                                         View details
