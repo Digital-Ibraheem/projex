@@ -10,6 +10,7 @@ interface Step4Props {
     roles: string[];
     isIdea: boolean;
     description: string;
+    images: File[];
   };
 }
 
@@ -21,7 +22,7 @@ const Step4: React.FC<Step4Props> = ({ formData }) => {
       <div className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-md border border-gray-300">
         {/* Title */}
         <h1 className="text-2xl font-bold text-gray-900">{formData.title}</h1>
-        
+
         {/* Project Status */}
         <p className="text-sm text-gray-500 mt-2">
           <span className="font-semibold">Status:</span> {formData.projectStatus === "work-in-progress" ? "Work in Progress" : "New Project"}
@@ -68,6 +69,20 @@ const Step4: React.FC<Step4Props> = ({ formData }) => {
         {formData.isIdea && (
           <div className="mt-6 p-3 bg-yellow-100 border border-yellow-300 rounded-lg text-yellow-800 text-sm">
             This project is still in the idea stage. Reach out to the creator for more details.
+          </div>
+        )}
+
+        {/* Uploaded Images Preview */}
+        {formData.images.length > 0 && (
+          <div className="mt-6">
+            <h3 className="text-gray-800 font-semibold mb-2">Uploaded Images</h3>
+            <div className="flex flex-wrap gap-2">
+              {formData.images.map((file, index) => (
+                <div key={index} className="w-20 h-20 rounded-md overflow-hidden border border-gray-300">
+                  <img src={URL.createObjectURL(file)} alt={`Uploaded ${index}`} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
