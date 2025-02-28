@@ -5,7 +5,7 @@ import commonSkills from '@/data/skillsData';
 import availableRoles from '@/data/roles';
 
 interface Step2Props {
-  formData: { technologies: string[]; roles: string[]; isIdea: boolean };
+  formData: { technologies: string[]; roles: string[] };
   updateFormData: (field: string, value: any) => void;
 }
 
@@ -69,20 +69,11 @@ const Step2: React.FC<Step2Props> = ({ formData, updateFormData }) => {
     }
   };
 
-  const toggleIdeaMode = () => {
-    updateFormData('isIdea', !formData.isIdea);
-    if (!formData.isIdea) {
-      // Clear technologies & roles when switching to "Just an idea"
-      updateFormData('technologies', []);
-      updateFormData('roles', []);
-    }
-  };
-
   return (
     <div className="flex flex-col">
       {/* Technologies Input */}
       <label htmlFor="technologies" className="text-gray-700 font-medium text-base mb-2">
-        Technologies Used (Max {MAX_TECHNOLOGIES})
+        Technologies Used (Max {MAX_TECHNOLOGIES}) <span className="text-gray-500">(Optional)</span>
       </label>
 
       {/* Input + Dropdown Wrapper */}
@@ -94,14 +85,12 @@ const Step2: React.FC<Step2Props> = ({ formData, updateFormData }) => {
           value={techInput}
           onChange={e => setTechInput(e.target.value)}
           onKeyDown={handleTechAdd}
-          className={`w-full border rounded-md p-2 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400 border-gray-300 ${
-            formData.isIdea ? 'bg-gray-200 cursor-not-allowed' : ''
-          }`}
-          disabled={formData.isIdea || formData.technologies.length >= MAX_TECHNOLOGIES}
+          className="w-full border rounded-md p-2 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400 border-gray-300"
+          disabled={formData.technologies.length >= MAX_TECHNOLOGIES}
         />
 
         {/* Auto-suggestions Dropdown */}
-        {showSuggestions && !formData.isIdea && (
+        {showSuggestions && (
           <ul className="absolute w-full bg-white border border-gray-300 rounded-md mt-1 shadow-md z-10 overflow-hidden">
             {filteredTech.map((tech, index) => (
               <li
@@ -136,15 +125,12 @@ const Step2: React.FC<Step2Props> = ({ formData, updateFormData }) => {
 
       {/* Roles Dropdown */}
       <label htmlFor="roles" className="text-gray-700 font-medium text-base mt-4">
-        Roles Needed
+        Roles Needed <span className="text-gray-500">(Optional)</span>
       </label>
       <select
         id="roles"
         onChange={handleRoleChange}
-        disabled={formData.isIdea}
-        className={`w-full border rounded-md p-2 mt-1 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400 border-gray-300 ${
-          formData.isIdea ? 'bg-gray-[#1a1a1a] cursor-not-allowed' : ''
-        }`}
+        className="w-full border rounded-md p-2 mt-1 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400 border-gray-300"
       >
         <option value="">Select a role...</option>
         {availableRoles.map((role, index) => (
@@ -167,19 +153,6 @@ const Step2: React.FC<Step2Props> = ({ formData, updateFormData }) => {
           </div>
         ))}
       </div>
-
-      {/* OR Line */}
-      <div className="flex items-center my-4">
-        <hr className="flex-grow border-gray-300" />
-        <span className="mx-3 text-gray-500 text-sm">OR</span>
-        <hr className="flex-grow border-gray-300" />
-      </div>
-
-      {/* Just an Idea for Now (Checkbox) */}
-      <label className="flex items-center space-x-2 cursor-pointer">
-        <input type="checkbox" checked={formData.isIdea} onChange={toggleIdeaMode} className="w-4 h-4" />
-        <span className="text-sm text-gray-700">This project is just an idea for now</span>
-      </label>
     </div>
   );
 };

@@ -36,7 +36,6 @@ const CreatePage = () => {
     projectStatus: "",
     technologies: [],
     roles: [],
-    isIdea: false,
     description: "",
     images: [],
   });
@@ -54,7 +53,7 @@ const CreatePage = () => {
         setCanProceed(formData.title.trim().length >= 8 && formData.projectStatus !== "");
         break;
       case 1:
-        setCanProceed(formData.technologies.length > 0 || formData.roles.length > 0 || formData.isIdea);
+        setCanProceed(true);
         break;
       case 2:
         setCanProceed(formData.description.trim().length >= MIN_DESCRIPTION_LENGTH && formData.description.trim().length < MAX_DESCRIPTION_LENGTH);
