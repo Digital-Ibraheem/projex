@@ -6,11 +6,15 @@ import HamburgerMenu from "@/components/ui/HamburgerMenu";
 import Button from "@/components/ui/Button";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
-import SignupForm from "./PopUp";
+import SignUpModal from "./SignUpModal";
+import LoginModal from "./LoginModal";
+import { useAuth } from "@/context/AuthContext";
+
 export default function Navbar() {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [hasScrolled, setHasScrolled] = useState(false);
-    const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+    const [activeModal, setActiveModal] = useState<"login" | "signup" | null>(null);
+    const { user, logout } = useAuth();
     const pathname = usePathname();
     const isHomePage = pathname === "/";
 
@@ -20,11 +24,17 @@ export default function Navbar() {
         };
 
         handleScroll();
-
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    const openModal = (modal: "login" | "signup") => {
+        setActiveModal(modal);
+    };
+
+    const closeModal = () => {
+        setActiveModal(null);
+    };
 
     return (
         <>
@@ -50,8 +60,24 @@ export default function Navbar() {
 
                     {/* Actions */}
                     <div className="flex items-center gap-4">
-                        <Link href="/login" className="text-white text-sm font-medium transition hover:text-gray-400">Log in</Link>
-                        <Button onClick={() => setIsPopUpOpen(true)}>Sign up</Button>
+                        {user ? (
+                            <>
+                                <Link href="/profile" className="text-white text-sm font-medium transition hover:text-gray-400">
+                                    Profile
+                                </Link>
+                                <Button onClick={logout}>Logout</Button>
+                            </>
+                        ) : (
+                            <>
+                                <button 
+                                    className="text-white text-sm font-medium transition hover:text-gray-400"
+                                    onClick={() => openModal("login")}
+                                >
+                                    Log in
+                                </button>
+                                <Button onClick={() => openModal("signup")}>Sign up</Button>
+                            </>
+                        )}
                         <HamburgerMenu isSidebarOpen={isSidebarOpen} onClick={() => setSidebarOpen(!isSidebarOpen)} />
                     </div>
                 </div>
@@ -66,32 +92,22 @@ export default function Navbar() {
                 )}
             >
                 <div className="py-5 px-10">
-                    <Link
-                        href="/create"
-                        onClick={() => setSidebarOpen(false)}
-                        className="text-white text-xl font-normal transition hover:text-gray-400"
-                    >
+                    <Link href="/create" onClick={() => setSidebarOpen(false)} className="text-white text-xl font-normal transition hover:text-gray-400">
                         Create
                     </Link>
                 </div>
                 <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
 
                 <div className="py-5 px-10">
-                    <Link
-                        href="/explore"
-                        onClick={() => setSidebarOpen(false)}
-                        className="text-white text-xl font-normal transition hover:text-gray-400"
-                    >
+                    <Link href="/explore" onClick={() => setSidebarOpen(false)} className="text-white text-xl font-normal transition hover:text-gray-400">
                         Explore
                     </Link>
                 </div>
-                <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
             </div>
 
-
-            {/* Sign Up Popup */}
-            {isPopUpOpen && <SignupForm setIsPopUpOpen={setIsPopUpOpen}/>
-            }
+            {/* Modals */}
+            {activeModal === "login" && <LoginModal onClose={closeModal} />}
+            {activeModal === "signup" && <SignUpModal onClose={closeModal} />}
         </>
     );
 }
