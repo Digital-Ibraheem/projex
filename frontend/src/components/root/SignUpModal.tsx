@@ -50,8 +50,12 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
       if (existingUsernames.includes(username.toLowerCase())) {
         setError('This username is already taken. Please choose another.');
         return;
+      } else  {
+        setError("");
+        onClose();
+        router.push('/explore');
+        return;
       }
-      router.push('/explore');
     }
   };
 
