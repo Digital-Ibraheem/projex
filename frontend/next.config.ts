@@ -1,8 +1,20 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "api.dicebear.com",
+        pathname: "/9.x/shapes/svg",
+      },
+    ],
+    domains: ["randomuser.me"],
+    dangerouslyAllowSVG: true, // Allow SVG images
+  },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

@@ -7,15 +7,9 @@ import Footer from '@/components/root/Footer';
 
 export default function HomePage() {
   return (
-    <div className={`min-h-screen bg-gray-900 text-white flex flex-col font-roboto`}>
-      {/* Navbar */}
-      <Navbar />
-
-      <main>
+    <div className={`min-h-screen bg-gray-900 flex flex-col font-roboto -mt-[90px]`}>
         <Hero />
         <AboutSection />
-      </main>
-      <Footer />
     </div>
   );
 }

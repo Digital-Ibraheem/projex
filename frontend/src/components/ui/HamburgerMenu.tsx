@@ -4,25 +4,18 @@ import { useState } from "react";
 import styles from "./HamburgerMenu.module.css";
 
 interface HamburgerMenuProps {
-  onClick?: () => void;
+  onClick: () => void;
+  isSidebarOpen?: boolean;
 }
 
-export default function HamburgerMenu({ onClick }: HamburgerMenuProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleClick = () => {
-    setIsOpen(!isOpen);
-    if (onClick) {
-        onClick();
-    }
-  };
+export default function HamburgerMenu({ onClick, isSidebarOpen }: HamburgerMenuProps) {
 
   return (
     <button
-      className={`${styles.menu} ${isOpen ? styles.open : ""}`}
-      onClick={handleClick}
+      className={`${styles.menu} ${isSidebarOpen ? styles.open : ""}`}
+      onClick={onClick}
       aria-label="Main Menu"
-      aria-expanded={isOpen}
+      aria-expanded={isSidebarOpen}
     >
       <div className={styles.icon}>
         <span></span>

@@ -26,7 +26,7 @@ export default function AboutSection() {
                     <div className="w-full flex flex-col justify-center h-full">
                         <h3 className="text-xl sm:text-2xl mt-4 sm:mt-0 font-bold text-[#1a1a1a]">Collaborate on real projects</h3>
                         <p className='text-gray-600 mt-2 font-inter text-sm lg:text-base'>
-                            You need real projects with actual impact to get a job - not a notes apps or an Instagram clone you copied off of YouTube. This platform connects you with driven students building meaningful solutions to real problems that people actually use.
+                            You need real projects with actual impact to get a job - not a notes apps or an Instagram clone copied off of YouTube. This platform connects you with driven students building meaningful solutions to real problems that people actually use.
                         </p>
                         <div className="flex items-center mt-4">
                             <span className="border border-black rounded-full p-[5px]">
