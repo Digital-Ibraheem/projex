@@ -9,12 +9,15 @@ interface SignUpModalProps {
   onClose: () => void;
 }
 
+const existingUsernames = ['kareem', 'ibraheem'];
+
 const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +47,15 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
         setError('Please enter your full name.');
         return;
       }
-      router.push('/explore');
+      if (existingUsernames.includes(username.toLowerCase())) {
+        setError('This username is already taken. Please choose another.');
+        return;
+      } else  {
+        setError("");
+        onClose();
+        router.push('/explore');
+        return;
+      }
     }
   };
 
@@ -97,7 +108,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
           </button>
 
           <h4 className="text-lg font-semibold text-gray-900">
-            {step === 1 ? 'Create an account' : 'Enter your full name'}
+            {step === 1 ? 'Create an account' : 'Enter more details'}
           </h4>
 
           {/* Step 1: Email & Password */}
@@ -180,6 +191,22 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
                 placeholder="Enter your full name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
+                className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:ring-1 focus:ring-gray-400"
+              />
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="mt-4">
+              <label htmlFor="username" className="text-gray-700 text-sm font-medium">
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:ring-1 focus:ring-gray-400"
               />
             </div>
