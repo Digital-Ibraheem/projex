@@ -1,6 +1,8 @@
 import Button from "@/components/ui/Button";
+import { useModal } from "@/context/ModalContext";
 
 export default function Footer() {
+    const { openModal } = useModal()
     return (
         <footer
             tabIndex={0} className="relative flex flex-col items-center justify-center text-center text-white bg-black pt-20 pb-10 bg-cover bg-scroll md:bg-fixed bg-[url('/images/campus.webp')]"
@@ -15,7 +17,7 @@ export default function Footer() {
                     Now&apos;s your chance to get in early. Connect with other students, build real projects, and help shape the future of this platform. Let&apos;s make something awesome together.
                 </p>
                 <div className="flex justify-center items-center mt-6">
-                    <Button className="">Join the Community →</Button>
+                    <Button onClick={() => openModal("signup")}>Join the Community →</Button>
                 </div>
             </div>
             
