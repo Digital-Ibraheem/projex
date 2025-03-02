@@ -80,7 +80,7 @@ const ExplorePage = () => {
                                 <div className="mt-3 flex flex-col gap-2">
                                     {/* Technologies */}
                                     <div>
-                                        <h3 className="text-gray-800 font-semibold text-sm">Technologies Used</h3>
+                                        <h3 className="text-gray-800 font-semibold text-sm">Technologies {project.projectStatus == 'new-project' ? "To Be Used" : "Used" }</h3>
                                         {project.technologies.length > 0 ? (
                                             <div className="flex flex-wrap gap-2 mt-1">
                                                 {project.technologies.map((tech, index) => (

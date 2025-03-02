@@ -78,7 +78,7 @@ export default function Navbar() {
                                         alt={user.name}
                                         className="rounded-full border border-gray-400"
                                     />
-                                    <span className="hidden sm:inline text-sm">{user.name}</span>
+                                    <span className="hidden sm:inline text-sm">{user.username}</span>
                                     <ChevronDown className="w-4 h-4" />
                                 </button>
 

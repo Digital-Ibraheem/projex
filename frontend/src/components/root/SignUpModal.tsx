@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { X, Eye, EyeOff, CheckCircle, ArrowLeft, ChevronLeft } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/context/ModalContext';
+import Image from 'next/image';
 
-// Remove the onClose prop from the interface
 const existingUsernames = ['kareem', 'ibraheem'];
 
 interface SignUpModalProps {
@@ -14,7 +14,7 @@ interface SignUpModalProps {
 }
 
 const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
-    const { openModal } = useModal(); // Use the modal context
+    const { openModal } = useModal();
     const [step, setStep] = useState(1);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -27,12 +27,31 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
 
     const router = useRouter();
 
+    // Robust email validation function
+    const isValidEmail = (email: string) => {
+        // Regular expression for email validation
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+        // Additional checks
+        return (
+            email.length > 0 &&
+            email.length <= 254 &&              // Maximum length for email addresses
+            emailRegex.test(email) &&           // Matches basic email pattern
+            email.indexOf('..') === -1 &&       // No consecutive dots
+            email.indexOf('@') !== 0 &&         // Doesn't start with @
+            email.indexOf('@') === email.lastIndexOf('@') &&  // Only one @ symbol
+            email.split('@')[0].length <= 64 && // Local part max length
+            email.split('@')[1]?.length >= 2 && // Domain part min length
+            !email.endsWith('.')                // Doesn't end with a dot
+        );
+    };
+
     const isValidPassword = (pwd: string) => pwd.length >= 8 && /\d/.test(pwd);
 
     const handleCreateAccount = () => {
-        if (step === 1) {
-            if (!email.includes('@')) {
-                setError('Please enter a valid email.');
+        if (step === 2) {
+            if (!isValidEmail(email)) {
+                setError('Please enter a valid email address.');
                 return;
             }
             if (!isValidPassword(password)) {
@@ -44,14 +63,27 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
                 return;
             }
             setError(null);
-            setStep(2);
-        } else {
+            setStep(3);
+        } else if (step === 3) {
             if (!fullName.trim()) {
                 setError('Please enter your full name.');
                 return;
+            } else if (existingUsernames.includes(username)) {
+                setError("This username already exists.")
+                return;
             }
+            onClose();
             router.push('/explore');
         }
+    };
+
+    const handleGoogleSignUp = () => {
+        console.log('Sign up with Google');
+        router.push('/explore');
+    };
+
+    const handleEmailSignUp = () => {
+        setStep(2);
     };
 
     return (
@@ -65,14 +97,12 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
             >
                 {/* Left Section - Hidden on Mobile */}
                 <div className="hidden sm:flex sm:w-1/2 relative p-6 flex-col pt-12 text-white">
-                    {/* Darkened Background Image */}
                     <div
                         className="absolute inset-0 bg-cover bg-right rounded-l-lg"
                         style={{ backgroundImage: "url('/images/modal-bg.webp')" }}
                     />
                     <div className="absolute inset-0 bg-black opacity-50 rounded-l-lg" />
 
-                    {/* Content */}
                     <div className="relative z-10">
                         <h2 className="text-2xl font-bold">Collaborate on Projects</h2>
                         <ul className="mt-4 space-y-2">
@@ -95,7 +125,15 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
                 {/* Right Section - Sign Up Form */}
                 <div className="sm:w-1/2 w-full p-8 sm:p-12 relative flex flex-col h-full sm:h-auto justify-between">
                     <div>
-                        {/* Close Button */}
+                        {step >= 2 && <button
+                            onClick={() => setStep(s => s-1)}
+                            className="absolute top-3 left-3 text-gray-500 hover:text-gray-700 flex items-center"
+                        >
+                            <div className="flex items-center">
+                                <ArrowLeft className="w-5 h-5" />
+                                <span className="ml-2">Back</span>
+                            </div>
+                        </button>}
                         <button
                             onClick={onClose}
                             className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
@@ -103,16 +141,49 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
                             <X className="w-5 h-5" />
                         </button>
 
-                        <h4 className="text-xl font-semibold text-gray-900">
-                            {step === 1 ? 'Create an account' : 'Enter more details'}
+                        <h4 className="text-xl font-semibold text-gray-900 flex align-center">
+                            {step === 1
+                                ? 'Create an account'
+                                : step === 2
+                                    ? 'Enter your credentials'
+                                    : 'Enter more details'}
                         </h4>
                         <p className='text-sm mt-4'>Already have an account? <u className='cursor-pointer' onClick={() => openModal('login')}>Sign in</u></p>
 
-
-                        {/* Step 1: Email & Password */}
                         {step === 1 && (
+                            <div className="mt-8 flex flex-col gap-4">
+                                <button
+                                    onClick={handleGoogleSignUp}
+                                    className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-md p-3 hover:bg-gray-50 transition"
+                                >
+                                    <div className="w-5 h-5 relative">
+                                        <Image
+                                            src="/images/google-logo.svg"
+                                            alt="Google"
+                                            width={20}
+                                            height={20}
+                                        />
+                                    </div>
+                                    <span className="text-gray-700">Sign up with Google</span>
+                                </button>
+
+                                <div className="flex items-center my-2">
+                                    <div className="flex-grow h-px bg-gray-300"></div>
+                                    <span className="px-3 text-gray-500 text-sm">or</span>
+                                    <div className="flex-grow h-px bg-gray-300"></div>
+                                </div>
+
+                                <button
+                                    onClick={handleEmailSignUp}
+                                    className="w-full border border-gray-300 rounded-md p-3 hover:bg-gray-50 transition text-gray-700"
+                                >
+                                    Sign up with Email
+                                </button>
+                            </div>
+                        )}
+
+                        {step === 2 && (
                             <>
-                                {/* Email Input */}
                                 <div className="mt-4">
                                     <label htmlFor="email" className="text-gray-700 text-sm font-medium">
                                         Email
@@ -127,7 +198,6 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
                                     />
                                 </div>
 
-                                {/* Password Input */}
                                 <div className="mt-4 relative">
                                     <label htmlFor="password" className="text-gray-700 text-sm font-medium">
                                         Password
@@ -151,7 +221,6 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
                                     </div>
                                 </div>
 
-                                {/* Confirm Password Input */}
                                 <div className="mt-4 relative">
                                     <label htmlFor="confirm-password" className="text-gray-700 text-sm font-medium">
                                         Confirm Password
@@ -177,8 +246,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
                             </>
                         )}
 
-                        {/* Step 2: Additional Details */}
-                        {step === 2 && (
+                        {step === 3 && (
                             <>
                                 <div className="mt-4">
                                     <label htmlFor="full-name" className="text-gray-700 text-sm font-medium">
@@ -210,17 +278,16 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
                             </>
                         )}
 
-
-                        {/* Error Message */}
                         {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-                        {/* Sign Up Button */}
-                        <Button inverted className="w-full mt-6" onClick={handleCreateAccount}>
-                            {step === 1 ? 'Create Account' : 'Continue'}
-                        </Button>
+
+                        {step > 1 && (
+                            <Button inverted className="w-full mt-6" onClick={handleCreateAccount}>
+                                {step === 2 ? 'Continue' : 'Create Account'}
+                            </Button>
+                        )}
                     </div>
 
                     <div>
-                        {/* Terms and Privacy */}
                         <p className="text-xs text-gray-500 mt-4 text-center">
                             By signing up, you agree to our{' '}
                             <a href="/terms_of_service" className="text-gray-600 underline">
