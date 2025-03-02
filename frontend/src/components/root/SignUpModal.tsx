@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 import { useModal } from '@/context/ModalContext';
 
 // Remove the onClose prop from the interface
+const existingUsernames = ['kareem', 'ibraheem'];
+
 const SignUpModal: React.FC = () => {
     const { closeModal, openModal } = useModal(); // Use the modal context
     const [step, setStep] = useState(1);
@@ -14,6 +16,7 @@ const SignUpModal: React.FC = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [fullName, setFullName] = useState('');
+    const [username, setUsername] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -43,7 +46,6 @@ const SignUpModal: React.FC = () => {
                 setError('Please enter your full name.');
                 return;
             }
-            closeModal(); // Use the context method
             router.push('/explore');
         }
     };
@@ -97,10 +99,9 @@ const SignUpModal: React.FC = () => {
                             <X className="w-5 h-5" />
                         </button>
 
-                        <h4 className="text-xl font-semibold text-gray-900">
-                            {step === 1 ? 'Create an account' : 'Enter your full name'}
+                        <h4 className="text-lg font-semibold text-gray-900">
+                            {step === 1 ? 'Create an account' : 'Enter more details'}
                         </h4>
-                        <p className='text-sm mt-4'>Already have an account? <u className='cursor-pointer' onClick={() => openModal('login')}>Sign in</u></p>
 
                         {/* Step 1: Email & Password */}
                         {step === 1 && (
@@ -170,22 +171,39 @@ const SignUpModal: React.FC = () => {
                             </>
                         )}
 
-                        {/* Step 2: Full Name */}
+                        {/* Step 2: Additional Details */}
                         {step === 2 && (
-                            <div className="mt-4">
-                                <label htmlFor="full-name" className="text-gray-700 text-sm font-medium">
-                                    Full Name
-                                </label>
-                                <input
-                                    type="text"
-                                    id="full-name"
-                                    placeholder="Enter your full name"
-                                    value={fullName}
-                                    onChange={(e) => setFullName(e.target.value)}
-                                    className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:ring-1 focus:ring-gray-400"
-                                />
-                            </div>
+                            <>
+                                <div className="mt-4">
+                                    <label htmlFor="full-name" className="text-gray-700 text-sm font-medium">
+                                        Full Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="full-name"
+                                        placeholder="Enter your full name"
+                                        value={fullName}
+                                        onChange={(e) => setFullName(e.target.value)}
+                                        className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:ring-1 focus:ring-gray-400"
+                                    />
+                                </div>
+
+                                <div className="mt-4">
+                                    <label htmlFor="username" className="text-gray-700 text-sm font-medium">
+                                        Username
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="username"
+                                        placeholder="Enter your username"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:ring-1 focus:ring-gray-400"
+                                    />
+                                </div>
+                            </>
                         )}
+
 
                         {/* Error Message */}
                         {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
