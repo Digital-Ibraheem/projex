@@ -6,8 +6,11 @@ import Button from '@/components/ui/Button';
 import { useAuth } from '@/context/AuthContext';
 import { useModal } from '@/context/ModalContext';
 
-// Remove the onClose prop from the interface
-const LoginModal: React.FC = () => {
+interface LoginModalProps {
+    onClose: () => void;
+}
+
+const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
     const { login } = useAuth();
     const { closeModal, openModal } = useModal(); // Use the modal context
     const [email, setEmail] = useState('');
@@ -31,11 +34,11 @@ const LoginModal: React.FC = () => {
     return (
         <div
             className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50 sm:p-4"
-            onClick={closeModal} // Use the context method
+            onClick={onClose}
         >
             <div
                 className="bg-white rounded-lg shadow-lg w-full max-w-3xl flex relative overflow-hidden sm:flex-row flex-col sm:h-auto h-full min-h-[550px]"
-                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+                onClick={(e) => e.stopPropagation()}
             >
                 {/* Left Section - Hidden on Mobile */}
                 <div className="hidden sm:flex sm:w-1/2 relative p-6 flex-col pt-12 text-white">
@@ -71,7 +74,7 @@ const LoginModal: React.FC = () => {
                     <div>
                         {/* Close Button */}
                         <button
-                            onClick={closeModal}
+                            onClick={onClose}
                             className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
                         >
                             <X className="w-5 h-5" />
