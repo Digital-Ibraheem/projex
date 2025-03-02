@@ -25,7 +25,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
         }
 
         // Simulate authentication (replace this with API call later)
-        const mockUser = { id: 1, name: "John Doe", email, avatar: "https://randomuser.me/api/portraits/men/1.jpg" };
+        const mockUser = { id: 1, name: "John Doe", email, avatar: "https://randomuser.me/api/portraits/men/1.jpg", username: "johndoe101" };
 
         login(mockUser);
         closeModal(); // Use the context method

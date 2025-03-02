@@ -14,7 +14,7 @@ interface SignUpModalProps {
 }
 
 const SignUpModal: React.FC<SignUpModalProps> = ({ onClose }) => {
-    const { closeModal, openModal } = useModal(); // Use the modal context
+    const { openModal } = useModal(); // Use the modal context
     const [step, setStep] = useState(1);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

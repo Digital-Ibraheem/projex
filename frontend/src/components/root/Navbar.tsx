@@ -69,7 +69,7 @@ export default function Navbar() {
                             <div className="relative" ref={dropdownRef}>
                                 <button
                                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                                    className="flex items-center gap-2 text-white"
+                                    className="flex items-center gap-2 text-white hidden sm:flex"
                                 >
                                     <Image
                                         src={user.avatar || "https://randomuser.me/api/portraits/men/1.jpg"}
@@ -121,6 +121,25 @@ export default function Navbar() {
                 )}
             >
                 <div>
+                    {user && <div>
+
+                        <div className="py-2 px-10">
+                            <Link href="/profile" onClick={() => setSidebarOpen(false)} className="text-white text-xl font-normal transition hover:text-gray-400 flex">
+                                <Image
+                                    src={user.avatar || "https://randomuser.me/api/portraits/men/1.jpg"}
+                                    width={32}
+                                    height={32}
+                                    alt={user.name}
+                                    className="rounded-full w-[50px] h-[50px] border border-gray-400"
+                                />
+                                <div className="flex flex-col justify-between h-full align-center">
+                                    <p className="text-base font-bold ml-4">{user.username}</p>
+                                    <p className="text-sm ml-4">{user.email}</p>
+                                </div>
+                            </Link>
+                        </div>
+                    </div>}
+                    <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
                     <div className="py-5 px-10">
                         <Link href="/create" onClick={() => setSidebarOpen(false)} className="text-white text-xl font-normal transition hover:text-gray-400">
                             Create
@@ -133,15 +152,6 @@ export default function Navbar() {
                             Explore
                         </Link>
                     </div>
-                    {user && <div>
-                        <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
-
-                        <div className="py-5 px-10">
-                            <Link href="/profile" onClick={() => setSidebarOpen(false)} className="text-white text-xl font-normal transition hover:text-gray-400">
-                                Profile
-                            </Link>
-                        </div>
-                    </div>}
                 </div>
 
                 {/* Logout Button at Bottom */}
