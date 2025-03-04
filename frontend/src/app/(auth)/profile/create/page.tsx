@@ -165,7 +165,6 @@ const ProfileCreatePage = () => {
         event.preventDefault();
         const errors = [];
 
-        if (!name.trim()) errors.push("name");
         if (!bio.trim()) errors.push("bio");
         if (skills.length === 0) errors.push("skills");
 
@@ -175,7 +174,6 @@ const ProfileCreatePage = () => {
             console.log("Form submitted successfully!");
 
             const profileData = {
-                name,
                 bio,
                 skills,
                 github,
@@ -236,24 +234,6 @@ const ProfileCreatePage = () => {
                             Please fill in all required fields.
                         </p>
                     )}
-                    {/* Name Section */}
-                    <div className="mb-4">
-                        <div className="flex justify-between items-center">
-                            <label htmlFor="name" className="text-gray-700 font-medium">
-                                Name
-                            </label>
-                            <span className="text-red-500 text-lg">*</span>
-                        </div>
-                        <input
-                            type="text"
-                            id="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            placeholder="Enter your preferred name..."
-                            className={`w-full border rounded-md p-2 mt-1 bg-white focus:outline-none focus:ring-1 focus:ring-gray-400 
-                                ${formErrors.includes("name") ? "border-red-500" : "border-gray-300"}`}
-                        />
-                    </div>
 
                     {/* Bio Section */}
                     <div className="mb-4">
@@ -292,9 +272,12 @@ const ProfileCreatePage = () => {
 
                     {/* Skills Section */}
                     <div className="mb-4 relative">
-                        <label htmlFor="skills" className="text-gray-700 font-medium">
-                            Technical Skills (Max {MAX_SKILLS})
-                        </label>
+                    <div className="flex justify-between items-center">
+                            <label htmlFor="bio" className="text-gray-700 font-medium">
+                                Technical Skills (Max 15)
+                            </label>
+                            <span className="text-red-500 text-lg">*</span>
+                        </div>
                         <input
                             type="text"
                             id="skills"

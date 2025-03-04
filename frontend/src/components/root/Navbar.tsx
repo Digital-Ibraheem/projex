@@ -9,13 +9,14 @@ import { usePathname } from "next/navigation";
 import SignUpModal from "./SignUpModal";
 import LoginModal from "./LoginModal";
 import { useAuth } from "@/context/AuthContext";
+import { useModal } from "@/context/ModalContext";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 
 export default function Navbar() {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [hasScrolled, setHasScrolled] = useState(false);
-    const [activeModal, setActiveModal] = useState<"login" | "signup" | null>(null);
+    const { activeModal, openModal, closeModal } = useModal();
     const { user, logout } = useAuth();
     const pathname = usePathname();
     const isHomePage = pathname === "/";
@@ -39,9 +40,6 @@ export default function Navbar() {
         if (dropdownOpen) document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [dropdownOpen]);
-
-    const openModal = (modal: "login" | "signup") => setActiveModal(modal);
-    const closeModal = () => setActiveModal(null);
 
     return (
         <>
@@ -68,28 +66,22 @@ export default function Navbar() {
                     {/* Actions */}
                     <div className="flex items-center gap-4">
                         {user ? (
-                            <div className="relative hidden sm:block" ref={dropdownRef}>
+                            <div className="relative" ref={dropdownRef}>
                                 <button
-                                    className="relative flex items-center"
-                                    onClick={() => setDropdownOpen((prev) => !prev)}
+                                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                                    className="flex items-center gap-2 text-white hidden sm:flex"
                                 >
                                     <Image
-                                        src="https://randomuser.me/api/portraits/men/72.jpg"
-                                        width={40}
-                                        height={40}
-                                        alt="Profile picture"
-                                        className="w-12 h-12 rounded-full"
+                                        src={user.avatar || "https://randomuser.me/api/portraits/men/1.jpg"}
+                                        width={32}
+                                        height={32}
+                                        alt={user.name}
+                                        className="rounded-full border border-gray-400"
                                     />
-                                    {/* Arrow Indicator */}
-                                    <div className="bg-gray-800 absolute bottom-0 right-0 rounded-full flex justify-center align-center">
-                                        <ChevronDown
-                                            className="w-4 h-4 text-white pt-[1px]  transform transition-transform"
-                                            style={{ transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)" }}
-                                        />
-                                    </div>
+                                    <span className="hidden sm:inline text-sm">{user.username}</span>
+                                    <ChevronDown className="w-4 h-4" />
                                 </button>
 
-                                {/* Dropdown Menu */}
                                 {dropdownOpen && (
                                     <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-300 shadow-lg rounded-lg overflow-hidden z-50">
                                         <Link href="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
@@ -129,6 +121,25 @@ export default function Navbar() {
                 )}
             >
                 <div>
+                    {user && <div>
+
+                        <div className="py-2 px-10">
+                            <Link href="/profile" onClick={() => setSidebarOpen(false)} className="text-white text-xl font-normal transition hover:text-gray-400 flex">
+                                <Image
+                                    src={user.avatar || "https://randomuser.me/api/portraits/men/1.jpg"}
+                                    width={32}
+                                    height={32}
+                                    alt={user.name}
+                                    className="rounded-full w-[50px] h-[50px] border border-gray-400"
+                                />
+                                <div className="flex flex-col justify-between h-full align-center">
+                                    <p className="text-base font-bold ml-4">{user.username}</p>
+                                    <p className="text-sm ml-4">{user.email}</p>
+                                </div>
+                            </Link>
+                        </div>
+                    </div>}
+                    <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
                     <div className="py-5 px-10">
                         <Link href="/create" onClick={() => setSidebarOpen(false)} className="text-white text-xl font-normal transition hover:text-gray-400">
                             Create
@@ -141,15 +152,6 @@ export default function Navbar() {
                             Explore
                         </Link>
                     </div>
-                    {user && <div>
-                        <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
-
-                        <div className="py-5 px-10">
-                            <Link href="/profile" onClick={() => setSidebarOpen(false)} className="text-white text-xl font-normal transition hover:text-gray-400">
-                                Profile
-                            </Link>
-                        </div>
-                    </div>}
                 </div>
 
                 {/* Logout Button at Bottom */}
