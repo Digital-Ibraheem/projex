@@ -1,30 +1,45 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import HamburgerMenu from "@/components/ui/HamburgerMenu";
 import Button from "@/components/ui/Button";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
-import SignupForm from "./PopUp";
+import SignUpModal from "./SignUpModal";
+import LoginModal from "./LoginModal";
+import { useAuth } from "@/context/AuthContext";
+import { useModal } from "@/context/ModalContext";
+import Image from "next/image";
+import { ChevronDown } from "lucide-react";
+
 export default function Navbar() {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [hasScrolled, setHasScrolled] = useState(false);
-    const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+    const { activeModal, openModal, closeModal } = useModal();
+    const { user, logout } = useAuth();
     const pathname = usePathname();
     const isHomePage = pathname === "/";
 
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
+
     useEffect(() => {
-        const handleScroll = () => {
-            setHasScrolled(window.scrollY > 50);
-        };
-
+        const handleScroll = () => setHasScrolled(window.scrollY > 50);
         handleScroll();
-
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setDropdownOpen(false);
+            }
+        };
+        if (dropdownOpen) document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [dropdownOpen]);
 
     return (
         <>
@@ -50,8 +65,48 @@ export default function Navbar() {
 
                     {/* Actions */}
                     <div className="flex items-center gap-4">
-                        <Link href="/login" className="text-white text-sm font-medium transition hover:text-gray-400">Log in</Link>
-                        <Button onClick={() => setIsPopUpOpen(true)}>Sign up</Button>
+                        {user ? (
+                            <div className="relative" ref={dropdownRef}>
+                                <button
+                                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                                    className="flex items-center gap-2 text-white hidden sm:flex"
+                                >
+                                    <Image
+                                        src={user.avatar || "https://randomuser.me/api/portraits/men/1.jpg"}
+                                        width={32}
+                                        height={32}
+                                        alt={user.name}
+                                        className="rounded-full border border-gray-400"
+                                    />
+                                    <span className="hidden sm:inline text-sm">{user.username}</span>
+                                    <ChevronDown className="w-4 h-4" />
+                                </button>
+
+                                {dropdownOpen && (
+                                    <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-300 shadow-lg rounded-lg overflow-hidden z-50">
+                                        <Link href="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                                            View Profile
+                                        </Link>
+                                        <button
+                                            onClick={() => { logout(); setDropdownOpen(false); }}
+                                            className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                        >
+                                            Logout
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <>
+                                <button
+                                    className="text-white text-sm font-medium transition hover:text-gray-400"
+                                    onClick={() => openModal("login")}
+                                >
+                                    Log in
+                                </button>
+                                <Button onClick={() => openModal("signup")}>Sign up</Button>
+                            </>
+                        )}
                         <HamburgerMenu isSidebarOpen={isSidebarOpen} onClick={() => setSidebarOpen(!isSidebarOpen)} />
                     </div>
                 </div>
@@ -60,38 +115,60 @@ export default function Navbar() {
             {/* Sidebar Navigation for Mobile */}
             <div
                 className={clsx(
-                    "fixed top-0 right-0 h-full bg-[#1a1a1a] shadow-lg z-40 transition-transform duration-300 pt-24",
+                    "fixed top-0 right-0 h-full bg-[#1a1a1a] shadow-lg z-40 transition-transform duration-300 pt-24 flex flex-col justify-between",
                     "w-full sm:w-[375px]", // Full width on mobile, 375px on larger screens
                     isSidebarOpen ? "translate-x-0" : "translate-x-full"
                 )}
             >
-                <div className="py-5 px-10">
-                    <Link
-                        href="/create"
-                        onClick={() => setSidebarOpen(false)}
-                        className="text-white text-xl font-normal transition hover:text-gray-400"
-                    >
-                        Create
-                    </Link>
-                </div>
-                <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
+                <div>
+                    {user && <div>
 
-                <div className="py-5 px-10">
-                    <Link
-                        href="/explore"
-                        onClick={() => setSidebarOpen(false)}
-                        className="text-white text-xl font-normal transition hover:text-gray-400"
-                    >
-                        Explore
-                    </Link>
+                        <div className="py-2 px-10">
+                            <Link href="/profile" onClick={() => setSidebarOpen(false)} className="text-white text-xl font-normal transition hover:text-gray-400 flex">
+                                <Image
+                                    src={user.avatar || "https://randomuser.me/api/portraits/men/1.jpg"}
+                                    width={32}
+                                    height={32}
+                                    alt={user.name}
+                                    className="rounded-full w-[50px] h-[50px] border border-gray-400"
+                                />
+                                <div className="flex flex-col justify-between h-full align-center">
+                                    <p className="text-base font-bold ml-4">{user.username}</p>
+                                    <p className="text-sm ml-4">{user.email}</p>
+                                </div>
+                            </Link>
+                        </div>
+                    </div>}
+                    <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
+                    <div className="py-5 px-10">
+                        <Link href="/create" onClick={() => setSidebarOpen(false)} className="text-white text-xl font-normal transition hover:text-gray-400">
+                            Create
+                        </Link>
+                    </div>
+                    <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
+
+                    <div className="py-5 px-10">
+                        <Link href="/explore" onClick={() => setSidebarOpen(false)} className="text-white text-xl font-normal transition hover:text-gray-400">
+                            Explore
+                        </Link>
+                    </div>
                 </div>
-                <div className="absolute left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/50 to-transparent pointer-events-none"></div>
+
+                {/* Logout Button at Bottom */}
+                <div>
+                    {user && (
+                        <div className="py-6 px-10">
+                            <Button onClick={() => { logout(); setSidebarOpen(false); }} className="w-full bg-red-600 hover:bg-red-700 text-white">
+                                Logout
+                            </Button>
+                        </div>
+                    )}
+                </div>
             </div>
 
-
-            {/* Sign Up Popup */}
-            {isPopUpOpen && <SignupForm setIsPopUpOpen={setIsPopUpOpen}/>
-            }
+            {/* Modals */}
+            {activeModal === "login" && <LoginModal onClose={closeModal} />}
+            {activeModal === "signup" && <SignUpModal onClose={closeModal} />}
         </>
     );
 }

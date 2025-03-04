@@ -1,28 +1,32 @@
 import Button from "@/components/ui/Button";
+import { useAuth } from "@/context/AuthContext";
+import { useModal } from "@/context/ModalContext";
 
 export default function Footer() {
+    const user = useAuth()?.user; // Accessing user instead of auth
+    const { openModal } = useModal()
     return (
         <footer
-            tabIndex={0} className="relative flex flex-col items-center justify-center text-center text-white bg-black pt-20 pb-10 bg-cover bg-scroll md:bg-fixed bg-[url('/images/campus.webp')]"
+            tabIndex={0} className={`relative flex flex-col items-center justify-center text-center text-white bg-black pt-20 pb-10 bg-cover bg-scroll md:bg-fixed bg-[url('/images/campus.webp')] ${user && "pt-10 pb-5"}`}
         >
             {/* Dark Overlay */}
             <div className="absolute inset-0 bg-black opacity-80"></div>
             
             {/* Open Beta Announcement */}
-            <div className="relative z-10">
+            {!user && <div className="relative z-10">
                 <h1 className="text-4xl sm:text-6xl font-semibold px-10">We&apos;re in Open Beta!</h1>
                 <p className="text-gray-400 mt-6 text-sm sm:text-base font-inter px-10">
                     Now&apos;s your chance to get in early. Connect with other students, build real projects, and help shape the future of this platform. Let&apos;s make something awesome together.
                 </p>
                 <div className="flex justify-center items-center mt-6">
-                    <Button className="">Join the Community →</Button>
+                    <Button onClick={() => openModal("signup")}>Join the Community →</Button>
                 </div>
-            </div>
+            </div>}
             
             {/* Footer Nav Section */}
-            <div className="relative w-full flex flex-col md:flex-row justify-center items-center text-center md:text-left px-4 sm:px-8 md:px-16 z-10 mt-10">
+            <div className={`relative w-full flex flex-col md:flex-row justify-center items-center text-center md:text-left px-4 sm:px-8 md:px-16 z-10 ${!user && 'mt-10'}`}>
                 {/* Faded Border at Top */}
-                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/90 to-transparent pointer-events-none"></div>
+                {!user && <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gray-600/90 to-transparent pointer-events-none"></div>}
 
                 <div className="flex flex-col md:flex-row justify-between items-center w-full max-w-[1296px] py-6 gap-4 md:gap-0">
                     {/* Logo */}
