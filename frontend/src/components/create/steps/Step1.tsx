@@ -41,32 +41,31 @@ const Step1: React.FC<Step1Props> = ({ formData, updateFormData }) => {
 
       {/* Project Status Selection */}
       <div className="mt-6 p-4 bg-white border border-gray-300 rounded-md shadow-sm">
-          <label className="text-gray-700 font-medium text-sm block mb-2">Project Status</label>
-          <div className="flex flex-col sm:flex-row sm:space-x-4 gap-2">
-            <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="radio"
-                value="work-in-progress"
-                checked={formData.projectStatus === "work-in-progress"}
-                onChange={() => updateFormData("projectStatus", "work-in-progress")}
-                className="w-4 h-4"
-              />
-              <span className="text-sm text-gray-700">Work in Progress</span>
-            </label>
-
-            <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="radio"
-                value="new-project"
-                checked={formData.projectStatus === "new-project"}
-                onChange={() => updateFormData("projectStatus", "new-project")}
-                className="w-4 h-4"
-              />
-              <span className="text-sm text-gray-700">New Project</span>
-            </label>
-          </div>
+        <label className="text-gray-700 font-medium text-sm block mb-2">Project Status</label>
+        <div className="flex flex-col sm:flex-row sm:space-x-4 gap-2">
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="radio"
+              value="new-project"
+              checked={formData.projectStatus === "new-project"}
+              onChange={() => updateFormData("projectStatus", "new-project")}
+              className="w-4 h-4"
+            />
+            <span className="text-sm text-gray-700">New Project</span>
+          </label>
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="radio"
+              value="work-in-progress"
+              checked={formData.projectStatus === "work-in-progress"}
+              onChange={() => updateFormData("projectStatus", "work-in-progress")}
+              className="w-4 h-4"
+            />
+            <span className="text-sm text-gray-700">Work in Progress</span>
+          </label>
         </div>
-      
+      </div>
+
     </div>
   );
 };
