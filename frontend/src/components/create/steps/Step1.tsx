@@ -8,9 +8,9 @@ interface Step1Props {
 }
 
 const exampleTitles = [
-  "UX/UI designer to bring website mockup and prototype to life",
-  "Video editor needed to create whiteboard explainer video",
-  "UX designer with e-commerce experience to support app development",
+  "SnapShelf: Instant Grocery Inventory Tracker",
+  "Personalized Coffee Subscription Service",
+  "FitSphere: Virtual Reality Workout Hub"
 ];
 
 const Step1: React.FC<Step1Props> = ({ formData, updateFormData }) => {
