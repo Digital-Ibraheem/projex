@@ -1,10 +1,7 @@
 package com.projex.backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
@@ -17,7 +14,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -27,11 +23,18 @@ public class User {
     @Column(nullable = false)
     private String fullName;
 
-    @Column(nullable = true)
+    @Column(nullable = true) // Allow null for Google OAuth users
     private String password;
 
-    @Column(nullable=true)
-    private String authProvider;
+    @Column(nullable = false) // "local" (default) or "google"
+    private String authProvider = "local";
 
-    private String
+    @Column(nullable = false) // Always set (Google or generated)
+    private String profilePictureUrl;
+
+    @Column(nullable = true, length = 500)
+    private String bio;
+
+    @Column(nullable = true)
+    private String location;
 }
