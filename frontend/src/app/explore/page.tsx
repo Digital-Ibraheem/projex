@@ -37,8 +37,56 @@ const ExplorePage = () => {
         <section className="min-h-screen flex flex-col py-10 px-5 items-center">
             {/* Error Message */}
             {error && (
-                <div className="mb-4 w-full max-w-6xl bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md text-sm">
-                    {error}
+                <div className="fixed top-[110px] w-full z-50 flex justify-center px-4">
+                    <div className="
+            bg-red-100 
+            border-l-4 border-red-500 
+            p-4 
+            rounded-r-lg 
+            shadow-lg 
+            shadow-lg
+            flex 
+            items-center 
+            space-x-4
+            animate-slide-in-down
+        ">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 text-red-500"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                            />
+                        </svg>
+                        <div>
+                            <p className="text-red-800 font-medium text-sm">
+                                {error}
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => setError(null)}
+                            className="ml-auto text-red-500 hover:text-red-700 focus:outline-none"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                            >
+                                <path
+                                    fillRule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clipRule="evenodd"
+                                />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             )}
 
@@ -54,8 +102,8 @@ const ExplorePage = () => {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl w-full mt-6">
                     {projects.map((project) => (
-                        <div 
-                            key={project.id} 
+                        <div
+                            key={project.id}
                             className="border rounded-lg shadow-md bg-white p-6 hover:shadow-lg transition flex flex-col justify-between h-full"
                         >
                             {/* Upper Content */}
@@ -65,7 +113,7 @@ const ExplorePage = () => {
 
                                 {/* Project Status */}
                                 <p className="text-sm text-gray-500 mt-1">
-                                    <span className="font-semibold">Status:</span> 
+                                    <span className="font-semibold">Status:</span>
                                     {project.projectStatus === "work-in-progress" ? " Work in Progress" : " New Project"}
                                 </p>
 
@@ -80,7 +128,7 @@ const ExplorePage = () => {
                                 <div className="mt-3 flex flex-col gap-2">
                                     {/* Technologies */}
                                     <div>
-                                        <h3 className="text-gray-800 font-semibold text-sm">Technologies {project.projectStatus == 'new-project' ? "To Be Used" : "Used" }</h3>
+                                        <h3 className="text-gray-800 font-semibold text-sm">Technologies {project.projectStatus == 'new-project' ? "To Be Used" : "Used"}</h3>
                                         {project.technologies.length > 0 ? (
                                             <div className="flex flex-wrap gap-2 mt-1">
                                                 {project.technologies.map((tech, index) => (
