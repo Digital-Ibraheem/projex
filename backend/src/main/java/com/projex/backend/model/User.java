@@ -3,6 +3,9 @@ package com.projex.backend.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
@@ -37,4 +40,16 @@ public class User {
 
     @Column(nullable = true)
     private String location;
+
+
+    @ElementCollection
+    @CollectionTable(name = "user_skills", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "skill")
+    private List<String> skills;
+
+    @Column(nullable = true)
+    private String githubUrl;
+
+    @Column(nullable = true)
+    private String linkedinUrl;
 }
